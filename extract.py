@@ -15,6 +15,9 @@ import subprocess
 import shutil
 import xml.etree.ElementTree as ET
 
+XRCatToolPath = "F:\SteamLibrary\steamapps\common\X Tools"           # Path where X Tools is installed.
+inputPath =     "D:\Spiele\Steam\steamapps\common\X4 Foundations"    # Path to the original X4 installation.
+outputPath =    "F:\SteamLibrary\steamapps\common\X Tools\Extracted" # Path where cat files will be extraced to.
 
 def hasCargo(fileName):
     # Parse the XML file
@@ -25,26 +28,15 @@ def hasCargo(fileName):
     cargo_element = root.find(".//properties/cargo")    
     return cargo_element is not None
 
-# Example XML of patch file to write:
-#
-#<?xml version='1.0' encoding='utf-8'?>
-#<diff><replace sel="//cargo/@max"><someValue * X></replace></diff>
-def writeModFile(path, newMax):
-    print(f"Writing to {path}, new cargo {newMax}")
-    diff = ET.Element("diff")
-    replace = ET.SubElement(diff, "replace", sel="//cargo/@max")
-    replace.text = str(newMax)
-
-    # Create the tree and write to the output file
-    tree = ET.ElementTree(diff)
-    tree.write(path, encoding='utf-8', xml_declaration=True)
+def isOwnFile(path):
+    return "lf_cargo_extension_" in path
 
 # recursively delete all files without cargo value
 def clearFiles(inputDir):
     for root, dirs, files in os.walk(inputDir):
         for file in files:
             inFilePath = os.path.join(root, file)
-            if not hasCargo(inFilePath):
+            if isOwnFile(inFilePath) or not hasCargo(inFilePath):
                 print(f"Removed {inFilePath} as no cargo value is found!")
                 os.remove(inFilePath)
 
@@ -65,7 +57,7 @@ def extractCatFile(inputDir, root, catFile, outputDir):
     print(f"Extracting {catFilePath} to {outPath}")
     if not os.path.exists(outPath):
         os.makedirs(outPath)
-    command = f'XRCatTool.exe -in "{catFilePath}" -out "{outPath}" -include storage_.*_l_.*macro.xml -exclude .*_l_liquid.* .*_l_container.* .*_l_solid.*'
+    command = f'"{XRCatToolPath}\XRCatTool.exe" -in "{catFilePath}" -out "{outPath}" -include storage_.*_l_.*macro.xml -exclude .*_l_liquid.* .*_l_container.* .*_l_solid.*'
     print(f"Calling {command}")
     subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, shell=True)
 
@@ -80,9 +72,6 @@ def remove_empty_dirs(path):
                 print(f"Removed empty directory: {dir_path}")
 
 def main():
-
-    inputPath = "D:\Spiele\Steam\steamapps\common\X4 Foundations"
-    outputPath = "F:\SteamLibrary\steamapps\common\X Tools\Extracted"
     if os.path.exists(outputPath):
         shutil.rmtree(outputPath)
 

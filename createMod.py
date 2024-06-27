@@ -4,6 +4,11 @@ import xml.etree.ElementTree as ET
 import shutil
 import subprocess
 
+XRCatToolPath = "F:\SteamLibrary\steamapps\common\X Tools"           # Path where X Tools is installed.
+inputPath =     "F:\SteamLibrary\steamapps\common\X Tools\Extracted" # Path where the extraced cat files are located.
+outputPath =    "F:\SteamLibrary\steamapps\common\X Tools\Mods"      # Path where the modded cat files will be written to.
+
+
 # Example XML of input file to read returning someValue:
 #
 #<?xml version="1.0" encoding="utf-8"?>
@@ -82,7 +87,7 @@ def copyContentXml(outPath, factor):
 # Call XRCatTools to put all the files into ext01.cat file
 def zipToCat(outPath):
     outCatFilePath = os.path.join(outPath, "ext_01.cat")
-    command = f'XRCatTool.exe -in "{outPath}" -out "{outCatFilePath}"'
+    command = f'"{XRCatToolPath}\XRCatTool.exe" -in "{outPath}" -out "{outCatFilePath}"'
     print(f"Calling {command}")
     subprocess.call(command, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, shell=True)
 
@@ -105,8 +110,6 @@ def cleanup(path):
     shutil.rmtree(path)
             
 def main():
-    inputPath = "F:\SteamLibrary\steamapps\common\X Tools\Extracted"
-    outputPath = "F:\SteamLibrary\steamapps\common\X Tools\Mods"
     changeNote = "Update for TimeLines"
     cleanup(outputPath)
     for factor in [2,3,5,10]:
