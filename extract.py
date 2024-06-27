@@ -16,8 +16,8 @@ import shutil
 import xml.etree.ElementTree as ET
 
 XRCatToolPath = "F:\SteamLibrary\steamapps\common\X Tools"           # Path where X Tools is installed.
-inputPath =     "D:\Spiele\Steam\steamapps\common\X4 Foundations"    # Path to the original X4 installation.
-outputPath =    "F:\SteamLibrary\steamapps\common\X Tools\Extracted" # Path where cat files will be extraced to.
+InputPath =     "D:\Spiele\Steam\steamapps\common\X4 Foundations"    # Path to the original X4 installation.
+OutputPath =    "F:\SteamLibrary\steamapps\common\X Tools\Extracted" # Path where cat files will be extraced to.
 
 def hasCargo(fileName):
     # Parse the XML file
@@ -72,12 +72,12 @@ def remove_empty_dirs(path):
                 print(f"Removed empty directory: {dir_path}")
 
 def main():
-    if os.path.exists(outputPath):
-        shutil.rmtree(outputPath)
+    if os.path.exists(OutputPath):
+        shutil.rmtree(OutputPath)
 
-    extractCatFiles(inputPath, outputPath)
-    clearFiles(outputPath)
-    remove_empty_dirs(outputPath)
+    extractCatFiles(InputPath, OutputPath)
+    clearFiles(OutputPath)
+    remove_empty_dirs(OutputPath)
 
 if __name__ == "__main__":
     main()

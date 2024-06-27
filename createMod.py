@@ -5,8 +5,8 @@ import shutil
 import subprocess
 
 XRCatToolPath = "F:\SteamLibrary\steamapps\common\X Tools"           # Path where X Tools is installed.
-inputPath =     "F:\SteamLibrary\steamapps\common\X Tools\Extracted" # Path where the extraced cat files are located.
-outputPath =    "F:\SteamLibrary\steamapps\common\X Tools\Mods"      # Path where the modded cat files will be written to.
+InputPath =     "F:\SteamLibrary\steamapps\common\X Tools\Extracted" # Path where the extraced cat files are located.
+OutputPath =    "F:\SteamLibrary\steamapps\common\X Tools\Mods"      # Path where the modded cat files will be written to.
 
 
 # Example XML of input file to read returning someValue:
@@ -111,12 +111,12 @@ def cleanup(path):
             
 def main():
     changeNote = "Update for TimeLines"
-    cleanup(outputPath)
+    cleanup(OutputPath)
     for factor in [2,3,5,10]:
-        outPath = os.path.join(outputPath , f"lf_cargo_extension_{factor}")
+        outPath = os.path.join(OutputPath , f"lf_cargo_extension_{factor}")
         if os.path.exists(outPath):
             shutil.rmtree(outPath)
-        modFiles(inputPath, outPath, factor)
+        modFiles(InputPath, outPath, factor)
         copyContentXml(outPath, factor)
         zipToCat(outPath)
         cleanupDirs(outPath)
